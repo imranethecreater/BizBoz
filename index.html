@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TokenViewr</title>
+
+  <!-- ✅ Google AdSense Publisher ID -->
+  <meta name="google-adsense-account" content="ca-pub-6586739714050156" />
+
+  <title>BizBoz</title>
   <style>
     body {
       font-family: sans-serif;
@@ -14,6 +18,8 @@
     input, button, select {
       margin: 5px;
       padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
     }
     .file-entry {
       margin: 10px 0;
@@ -21,25 +27,48 @@
       padding: 10px;
       border-radius: 5px;
     }
-    .hidden {
-      display: none;
+    hr {
+      border: 1px solid #444;
+    }
+    .ad-section {
+      margin-top: 20px;
+      background: #222;
+      padding: 15px;
+      border-radius: 8px;
     }
   </style>
+
+  <!-- ✅ Google AdSense Script (optional until approved) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1>📤 TokenViewr</h1>
+  <h1>📤 BizBoz</h1>
 
   <div>
-    👤 Username: <input type="text" id="username" placeholder="Enter name" />
+    👤 Username: <input type="text" id="username" placeholder="Enter your name" />
     <br />
     🪙 Tokens: <span id="tokenDisplay">10</span>
-    <button onclick="earnTokens()">Watch Ad (+1)</button>
+  </div>
+
+  <div class="ad-section">
+    <h3>🎬 Watch Ad to Earn 1 Token</h3>
+    <!-- Ad Placeholder (replace with real ad slot later) -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-6586739714050156"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <button onclick="earnTokens()">✅ I watched the ad</button>
   </div>
 
   <hr />
 
   <div>
-    <h3>Upload a File</h3>
+    <h3>📦 Upload a File</h3>
     <input type="file" id="fileInput" />
     View Cost (Tokens): <input type="number" id="viewCost" value="1" min="1" />
     <button onclick="uploadFile()">Upload</button>
@@ -48,7 +77,7 @@
   <hr />
 
   <div>
-    <h3>📜 Uploaded Files</h3>
+    <h3>📁 Uploaded Files</h3>
     <div id="fileList"></div>
   </div>
 
@@ -56,14 +85,14 @@
     let tokens = 10;
     const fileList = [];
 
+    function updateTokens() {
+      document.getElementById("tokenDisplay").innerText = tokens;
+    }
+
     function earnTokens() {
       tokens++;
       updateTokens();
-      alert("You earned 1 token!");
-    }
-
-    function updateTokens() {
-      document.getElementById("tokenDisplay").innerText = tokens;
+      alert("✅ You earned 1 token!");
     }
 
     function uploadFile() {
@@ -107,8 +136,8 @@
         div.className = "file-entry";
         div.innerHTML = `
           <strong>${f.name}</strong><br>
-          Cost: ${f.cost} tokens <br>
-          ${f.unlocked ? `<a href="${f.url}" target="_blank">Open</a>` : `<button onclick="unlockFile(${i})">Unlock</button>`}
+          Cost: ${f.cost} tokens<br>
+          ${f.unlocked ? `<a href="${f.url}" target="_blank">Open File</a>` : `<button onclick="unlockFile(${i})">Unlock</button>`}
         `;
         container.appendChild(div);
       });
