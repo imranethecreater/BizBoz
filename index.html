@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TokenViewr</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 20px;
+    }
+    input, button, select {
+      margin: 5px;
+      padding: 5px 10px;
+    }
+    .file-entry {
+      margin: 10px 0;
+      background: #222;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>📤 TokenViewr</h1>
+
+  <div>
+    👤 Username: <input type="text" id="username" placeholder="Enter name" />
+    <br />
+    🪙 Tokens: <span id="tokenDisplay">10</span>
+    <button onclick="earnTokens()">Watch Ad (+1)</button>
+  </div>
+
+  <hr />
+
+  <div>
+    <h3>Upload a File</h3>
+    <input type="file" id="fileInput" />
+    View Cost (Tokens): <input type="number" id="viewCost" value="1" min="1" />
+    <button onclick="uploadFile()">Upload</button>
+  </div>
+
+  <hr />
+
+  <div>
+    <h3>📜 Uploaded Files</h3>
+    <div id="fileList"></div>
+  </div>
+
+  <script>
+    let tokens = 10;
+    const fileList = [];
+
+    function earnTokens() {
+      tokens++;
+      updateTokens();
+      alert("You earned 1 token!");
+    }
+
+    function updateTokens() {
+      document.getElementById("tokenDisplay").innerText = tokens;
+    }
+
+    function uploadFile() {
+      const fileInput = document.getElementById("fileInput");
+      const cost = parseInt(document.getElementById("viewCost").value);
+      const file = fileInput.files[0];
+      if (!file) return alert("Please choose a file.");
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataURL = e.target.result;
+        fileList.push({
+          name: file.name,
+          url: dataURL,
+          cost: cost,
+          unlocked: false
+        });
+        renderFiles();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function unlockFile(index) {
+      const file = fileList[index];
+      if (file.unlocked) return alert("Already unlocked!");
+      if (tokens >= file.cost) {
+        tokens -= file.cost;
+        file.unlocked = true;
+        updateTokens();
+        renderFiles();
+      } else {
+        alert("Not enough tokens!");
+      }
+    }
+
+    function renderFiles() {
+      const container = document.getElementById("fileList");
+      container.innerHTML = "";
+      fileList.forEach((f, i) => {
+        const div = document.createElement("div");
+        div.className = "file-entry";
+        div.innerHTML = `
+          <strong>${f.name}</strong><br>
+          Cost: ${f.cost} tokens <br>
+          ${f.unlocked ? `<a href="${f.url}" target="_blank">Open</a>` : `<button onclick="unlockFile(${i})">Unlock</button>`}
+        `;
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
